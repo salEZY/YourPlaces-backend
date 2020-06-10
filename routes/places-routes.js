@@ -12,7 +12,7 @@ const DUMMY_PLACES = [
       lng: 20.4868401,
     },
     address: "Djevdjelijska 15",
-    creator: "u1",
+    creator: "p1",
   },
   {
     id: "u2",
@@ -23,7 +23,7 @@ const DUMMY_PLACES = [
       lng: 20.495167,
     },
     address: "Bore Prodanovica 9a",
-    creator: "u2",
+    creator: "p2",
   },
 ];
 
