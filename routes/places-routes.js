@@ -14,7 +14,7 @@ const {
 router.get("/:placeId", getPlaceById);
 
 // GET place by user ID
-router.get("/user/:userId", getPlaceByUserId);
+router.get("/user/:userId", getPlacesByUserId);
 
 // POST Add place
 router.post("/", addPlace);
