@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
   getPlaceById,
-  getPlaceByUserId,
+  getPlacesByUserId,
   addPlace,
   updatePlace,
   deletePlace,
