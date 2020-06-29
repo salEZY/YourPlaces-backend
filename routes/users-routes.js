@@ -1,4 +1,5 @@
 const express = require("express");
+const { check } = require("express-validator");
 
 const router = express.Router();
 
@@ -8,7 +9,15 @@ const { getUsers, signup, login } = require("../controllers/users-controller");
 router.get("/:placeId", getUsers);
 
 // POST Sign up
-router.post("/signup", signup);
+router.post(
+  "/signup",
+  [
+    check("name").not().isEmpty(),
+    check("email").normalizeEmail().isEmail(),
+    check("password").isLength({ min: 6 }),
+  ],
+  signup
+);
 
 // POST Login
 router.post("/:login", login);
