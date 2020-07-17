@@ -2,6 +2,7 @@ const { v4: uuid4 } = require("uuid");
 const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
+const Place = require("../models/place");
 const getCoordsForAddress = require("../util/location");
 
 let DUMMY_PLACES = [
@@ -72,16 +73,22 @@ const addPlace = async (req, res, next) => {
     return next(error);
   }
 
-  const newPlace = {
-    id: uuid4(),
+  const newPlace = new Place({
     title,
     description,
     location: coordinates,
     address,
+    image:
+      "https://res.volvox.rs//scripts/staticMapCreate.php?position=44.805466210309,20.493638214004",
     creator,
-  };
+  });
+  try {
+    await newPlace.save();
+  } catch (error) {
+    const err = new HttpError("Creating place failed. Please try again!", 500);
+    return next(err);
+  }
 
-  DUMMY_PLACES.push(newPlace);
   res.status(201).json({ place: newPlace });
 };
 
