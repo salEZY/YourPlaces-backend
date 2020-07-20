@@ -29,7 +29,7 @@ app.use((error, req, res, next) => {
 mongoose
   .connect(
     "mongodb+srv://salezy:salezy@yourplaces.wnaqk.mongodb.net/db?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
+    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true }
   )
   .then(() => {
     console.log("MongoDB connected!");

@@ -5,31 +5,6 @@ const HttpError = require("../models/http-error");
 const Place = require("../models/place");
 const getCoordsForAddress = require("../util/location");
 
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Beograd",
-    description: "NAJJACI GRAD",
-    location: {
-      lat: 44.8005828,
-      lng: 20.4868401,
-    },
-    address: "Djevdjelijska 15",
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Beograd",
-    description: "GRAD BEO",
-    location: {
-      lat: 44.807148,
-      lng: 20.495167,
-    },
-    address: "Bore Prodanovica 9a",
-    creator: "u2",
-  },
-];
-
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.placeId;
   let place;
@@ -114,7 +89,9 @@ const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
-    throw new HttpError("Invalid inputs passed, please check your data", 422);
+    return next(
+      new HttpError("Invalid inputs passed, please check your data", 422)
+    );
   }
 
   const { title, description } = req.body;
