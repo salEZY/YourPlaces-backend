@@ -6,7 +6,6 @@ const HttpError = require("../models/http-error");
 const Place = require("../models/place");
 const User = require("../models/user");
 const getCoordsForAddress = require("../util/location");
-const mongooseUniqueValidator = require("mongoose-unique-validator");
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.placeId;
@@ -32,22 +31,22 @@ const getPlaceById = async (req, res, next) => {
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.userId;
 
-  let places;
+  let placesFromUser;
   try {
-    places = await Place.find({ creator: userId });
+    placesFromUser = await User.findById(userId).populate("places");
   } catch (error) {
     const err = new HttpError("Could not find  places. Try again?", 500);
     return next(err);
   }
 
-  if (!places || places.length === 0) {
+  if (!placesFromUser || placesFromUser.length === 0) {
     return next(
       new HttpError("Could not find places for the provided user id!", 404)
     );
   }
 
   res.json({
-    places: places.map((place) => place.toObject({ getters: true })),
+    places: placesFromUser.map((place) => place.toObject({ getters: true })),
   });
 };
 
