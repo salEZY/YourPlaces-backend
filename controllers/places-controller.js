@@ -1,9 +1,12 @@
 const { v4: uuid4 } = require("uuid");
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 const HttpError = require("../models/http-error");
 const Place = require("../models/place");
+const User = require("../models/user");
 const getCoordsForAddress = require("../util/location");
+const mongooseUniqueValidator = require("mongoose-unique-validator");
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.placeId;
@@ -75,8 +78,27 @@ const addPlace = async (req, res, next) => {
       "https://res.volvox.rs//scripts/staticMapCreate.php?position=44.805466210309,20.493638214004",
     creator,
   });
+
+  let user;
   try {
-    await newPlace.save();
+    user = await User.findById(creator);
+  } catch (error) {
+    const err = new HttpError("Creating place failed! Try again?", 500);
+    return next(err);
+  }
+
+  if (!user) {
+    const error = new HttpError("User not found for the provided id!", 404);
+    return next(err);
+  }
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await newPlace.save({ session: sess });
+    user.places.push(newPlace);
+    await user.save({ session: sess });
+    await sess.commitTransaction();
   } catch (error) {
     const err = new HttpError("Creating place failed. Please try again!", 500);
     return next(err);
@@ -120,16 +142,27 @@ const updatePlace = async (req, res, next) => {
 
 const deletePlace = async (req, res, next) => {
   const placeId = req.params.placeId;
+
   let place;
   try {
-    place = await Place.findById(placeId);
+    place = await Place.findById(placeId).populate("creator");
   } catch (error) {
     const err = new HttpError("Could not delete the place!", 500);
     return next(err);
   }
 
+  if (!place) {
+    const err = new HttpError("Could not find place for this id!", 404);
+    return next(err);
+  }
+
   try {
-    await place.remove();
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await place.remove({ session: sess });
+    place.creator.places.pull(place);
+    await place.creator.save({ session: sess });
+    await sess.commitTransaction();
   } catch (error) {
     const err = new HttpError("Could not delete the place!", 500);
     return next(err);
