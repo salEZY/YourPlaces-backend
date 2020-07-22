@@ -3,17 +3,16 @@ const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 
-const DUMMY_USERS = [
-  {
-    id: "u1",
-    name: "salEzY",
-    email: "test@test.com",
-    password: "test",
-  },
-];
+const getUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({}, "-password");
+  } catch (error) {
+    const err = new HttpError("Fetching users failed", 500);
+    return next(err);
+  }
 
-const getUsers = (req, res, next) => {
-  res.json({ users: DUMMY_USERS });
+  res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
 const signup = async (req, res, next) => {
@@ -24,7 +23,7 @@ const signup = async (req, res, next) => {
     );
   }
 
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
@@ -44,7 +43,7 @@ const signup = async (req, res, next) => {
     image:
       "https://lh3.googleusercontent.com/proxy/T_0CZXBK4d73SxPUzwLDgWjt2Cwk5TwmX1BDMoFsU-OcnmyYYulwPRDlC-p4RRHsMV98LFoxer4lAJd9DAslKvQKBqjnzAkaIg3eeXyTMh5XpaiY5t00o-lAirg2LDNYp_KnQDRkrRJzf5IAcvx83FNgEgys",
     password,
-    places,
+    places: [],
   });
   try {
     await createdUser.save();

@@ -6,7 +6,7 @@ const router = express.Router();
 const { getUsers, signup, login } = require("../controllers/users-controller");
 
 // GET All users
-router.get("/:placeId", getUsers);
+router.get("/", getUsers);
 
 // POST Sign up
 router.post(
