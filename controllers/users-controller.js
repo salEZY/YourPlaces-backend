@@ -41,7 +41,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     image:
-      "https://lh3.googleusercontent.com/proxy/T_0CZXBK4d73SxPUzwLDgWjt2Cwk5TwmX1BDMoFsU-OcnmyYYulwPRDlC-p4RRHsMV98LFoxer4lAJd9DAslKvQKBqjnzAkaIg3eeXyTMh5XpaiY5t00o-lAirg2LDNYp_KnQDRkrRJzf5IAcvx83FNgEgys",
+      "https://is4-ssl.mzstatic.com/image/thumb/Purple118/v4/fc/e7/00/fce70074-d3fb-4b09-e5d9-c748a2f9f65b/source/256x256bb.jpg",
     password,
     places: [],
   });
