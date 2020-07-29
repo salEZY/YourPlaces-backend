@@ -40,8 +40,7 @@ const signup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image:
-      "https://is4-ssl.mzstatic.com/image/thumb/Purple118/v4/fc/e7/00/fce70074-d3fb-4b09-e5d9-c748a2f9f65b/source/256x256bb.jpg",
+    image: req.file.path,
     password,
     places: [],
   });

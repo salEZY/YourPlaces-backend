@@ -1,4 +1,4 @@
-const { v4: uuid4 } = require("uuid");
+const fs = require("fs");
 const { validationResult } = require("express-validator");
 const mongoose = require("mongoose");
 
@@ -75,8 +75,7 @@ const addPlace = async (req, res, next) => {
     description,
     location: coordinates,
     address,
-    image:
-      "https://res.volvox.rs//scripts/staticMapCreate.php?position=44.805466210309,20.493638214004",
+    image: req.file.path,
     creator,
   });
 
@@ -157,6 +156,8 @@ const deletePlace = async (req, res, next) => {
     return next(err);
   }
 
+  const imagePath = place.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -168,6 +169,10 @@ const deletePlace = async (req, res, next) => {
     const err = new HttpError("Could not delete the place!", 500);
     return next(err);
   }
+
+  fs.unlink(imagePath, (err) => {
+    console.log(err);
+  });
 
   res.status(200).json({ message: "Place deleted!" });
 };
