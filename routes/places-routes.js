@@ -1,6 +1,7 @@
 const express = require("express");
 
 const { check } = require("express-validator");
+const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
@@ -18,6 +19,8 @@ router.get("/:placeId", getPlaceById);
 
 // GET place by user ID
 router.get("/user/:userId", getPlacesByUserId);
+
+router.use(checkAuth);
 
 // POST Add place
 router.post(
