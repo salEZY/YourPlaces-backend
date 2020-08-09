@@ -110,7 +110,7 @@ const login = async (req, res, next) => {
   let token;
   try {
     token = jwt.sign(
-      { userId: createdUser.id, email: createdUser.email },
+      { userId: existingUser.id, email: existingUser.email },
       "secret_key",
       { expiresIn: "1h" }
     );
@@ -121,7 +121,7 @@ const login = async (req, res, next) => {
 
   res
     .status(201)
-    .json({ userId: createdUser.id, email: createdUser.email, token });
+    .json({ userId: existingUser.id, email: existingUser.email, token });
 };
 
 module.exports = {

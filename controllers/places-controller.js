@@ -127,7 +127,7 @@ const updatePlace = async (req, res, next) => {
     return next(err);
   }
 
-  if (place.creator.toString() !== req.userData.userId) {
+  if (placeToUpdate.creator.toString() !== req.userData.userId) {
     const err = new HttpError("Not allowed!", 401);
     return next(err);
   }
