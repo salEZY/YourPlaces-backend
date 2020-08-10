@@ -1,0 +1,8 @@
+{
+  "env": {
+    "DB_USER": "salezy",
+    "DB_PASSWORD": "salezy",
+    "API_KEY": "AIzaSyD8IiZ5H5AbE1C6nqOGRlOI8u6y5XXyeyg",
+    "JWT_KEY": "secret_key"
+  }
+}
