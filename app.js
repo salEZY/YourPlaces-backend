@@ -54,7 +54,7 @@ mongoose
   )
   .then(() => {
     console.log("MongoDB connected!");
-    app.listen(process.ENV.port || 5000, () =>
+    app.listen(process.env.PORT || 5000, () =>
       console.log("Server start at port 5000!")
     );
   })
